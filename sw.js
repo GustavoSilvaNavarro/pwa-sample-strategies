@@ -8,30 +8,34 @@ self.addEventListener('install', e => {
   );
 });
 
-//* Cached First Strategy
+//* State while revalidate strategy
 self.addEventListener('fetch', e => {
   e.respondWith(
-    // searching in the cache
-    caches.match(e.request).then(response => {
-      if (response) return response; // The request is in the cache | cache hit
-      else return fetch(e.request);  // We need to go to the network | cache miss
+    caches.match(e.request).then(cachedResponse => {
+      /**
+       * Even if the response is in the cache, we fetch it
+       * and update the cache for future usage
+       */
+      const fetchPromise = fetch(e.request).then(networkResponse => {
+        caches.open('assets').then(cache => {
+          cache.put(e.request, networkResponse.clone());
+          return networkResponse;
+        });
+      });
+
+      //? We use the currently cached version if it's there
+      return cachedResponse || fetchPromise; // cached or a network fetch
     })
   );
 });
 
+//* Cached First Strategy
 // self.addEventListener('fetch', e => {
-//   if (e.request.url === 'http://localhost:3000/fake') {
-//     const resp = new Response(`Service Worker response on URL ${e.request.url}`);
-//     e.respondWith(resp);
-//   } else {
-//     e.respondWith(
-//       caches.match(e.request).then(cachedResponse => {
-//         if (cachedResponse) {
-//           return cachedResponse
-//         } else {
-//           return fetch(e.request);
-//         }
-//       })
-//     );
-//   }
+//   e.respondWith(
+//     // searching in the cache
+//     caches.match(e.request).then(response => {
+//       if (response) return response; // The request is in the cache | cache hit
+//       else return fetch(e.request);  // We need to go to the network | cache miss
+//     })
+//   );
 // });

@@ -2,7 +2,6 @@
   "name": "Codepad Masters, PWA sample for an app",
   "short_name": "Codepad",
   "start_url": "./?utm_source=pwa",
-  "orientation": "landscape",
   "theme_color": "#ffc252",
   "scope": "./",
   "display": "standalone",
@@ -19,9 +18,17 @@
     },
     {
       "src": "icons/maskable_icon.png",
-      "sizes": "512x512",
+      "sizes": "1462x1462",
       "type": "image/png",
       "purpose": "maskable"
+    }
+  ],
+  "description": "This app lets you add node while you code",
+  "screenshots": [
+    {
+      "src": "icons/screenshot.png",
+      "sizes": "1170x2532",
+      "type": "image/png"
     }
   ]
 }

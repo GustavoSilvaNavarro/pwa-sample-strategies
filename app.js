@@ -81,7 +81,6 @@ function renderNotes() {
   })
 }
 
-
 function save() {
   localStorage.setItem("notes", JSON.stringify(notes));
 }
